@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   n8n:
     image: docker.n8n.io/n8nio/n8n
@@ -11,6 +13,8 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
       - n8n_data:/files
+    networks:
+      - traefik-public
     deploy:
       placement:
         constraints:
@@ -20,7 +24,7 @@ services:
       labels:
       - traefik.enable=true
       - traefik.swarm.network=traefik-public
-      - traefik.http.routers.n8n.rule=Host(`${HOSTNAME}`)
+      - traefik.http.routers.n8n.rule=Host(${HOSTNAME})
       - traefik.http.routers.n8n.tls=true
       - traefik.http.routers.n8n.entrypoints=http
       - traefik.http.services.n8n.loadbalancer.server.port=5678
@@ -32,3 +36,7 @@ volumes:
       type: "nfs"
       o: "addr=${NFS_SERVER},rw,nfsvers=4"
       device: ":/mnt/ext1/docker/n8n"
+
+networks:
+  traefik-public:
+    external: true
