@@ -24,8 +24,7 @@ services:
       labels:
       - traefik.enable=true
       - traefik.swarm.network=traefik-public
-      - traefik.http.routers.n8n.rule=Host(${HOSTNAME})
-      - traefik.http.routers.n8n.tls=true
+      - traefik.http.routers.n8n.rule=Host(`${HOSTNAME}`)
       - traefik.http.routers.n8n.entrypoints=http
       - traefik.http.services.n8n.loadbalancer.server.port=5678
 
